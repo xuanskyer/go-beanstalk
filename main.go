@@ -7,6 +7,7 @@ import (
 	"runtime"
 	"go-beanstalk/libs/Logger"
 	"go-beanstalk/libs/Queue"
+	"go-beanstalk/libs/Db"
 )
 
 /**
@@ -17,7 +18,7 @@ func main() {
 
 	Logger.Notice(" ============== 队列任务处理脚本启动 ============== ")
 
-	//Db.Test()
+	Db.Test()
 
 
 	runtime.GOMAXPROCS(runtime.NumCPU())

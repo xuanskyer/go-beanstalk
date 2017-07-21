@@ -5,9 +5,16 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"fmt"
 	"go-beanstalk/libs/Db/ModelFields"
+	"go-beanstalk/libs/Config"
 )
 
+func buildDsn()  {
+
+}
+
 func Test() {
+	v := Config.Get("db.test")
+	fmt.Println(v)
 	mysql, err := gorm.Open("mysql", "root:root@/test?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		fmt.Println(err)
