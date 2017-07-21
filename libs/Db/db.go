@@ -24,7 +24,10 @@ func Test() {
 	mysql.Find(&info) // find product with id 1
 
 	fmt.Println(info)
-	fmt.Println(info.Id)
+	//fmt.Println(info.Id)
+	//fmt.Println(info.Enum_a)
+	//fmt.Println(info.Status)
+	//fmt.Println(info.Created_at)
 
 	mysql.Find(&list, "title = ?", "title1") // find product with code l1212
 	fmt.Println(list)

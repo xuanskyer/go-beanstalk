@@ -8,6 +8,8 @@ type TestModel struct {
 	Name       string
 	Desc       string
 	Title      string
+	Enum_a      string
+	Status		int
 	Created_at time.Time
 }
 

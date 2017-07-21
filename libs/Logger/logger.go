@@ -1,8 +1,9 @@
 package Logger
 
 import (
-	"os"
+	"reflect"
 	"github.com/op/go-logging"
+	"os"
 	"log"
 )
 
@@ -12,10 +13,9 @@ var (
 
 type Priority int
 
-const (
-	LogTypeStd  = "std"
-	LogTypeFile = "file"
-)
+var LogTypeStd interface{} = "std"
+var LogTypeFile interface{} = "file"
+
 const (
 	// From /usr/include/sys/syslog.h.
 	// These are the same on Linux, BSD, and OS X.
@@ -29,48 +29,48 @@ const (
 	LOG_DEBUG
 )
 
-func Debug(params ... string) {
+func Debug(params ... interface{}) {
 
 	Dump(LOG_DEBUG, params)
 }
 
-func Info(params ... string) {
+func Info(params ... interface{}) {
 
 	Dump(LOG_INFO, params)
 }
 
-func Notice(params ... string) {
+func Notice(params ... interface{}) {
 
 	Dump(LOG_NOTICE, params)
 }
 
-func Warning(params ... string) {
+//
+func Warning(params ... interface{}) {
 
 	Dump(LOG_WARNING, params)
 }
 
-func Error(params ... string) {
+func Error(params ... interface{}) {
 	Dump(LOG_ERR, params)
 }
 
-func Critical(params ...string) {
+func Critical(params ...interface{}) {
 	Dump(LOG_CRIT, params)
 }
 
-func Dump(log_priority Priority, params []string) {
+func Dump(log_priority Priority, params interface{}) {
 
-	total := 0
-	for range params {
-		total += 1
-	}
+	params_reflected := reflect.ValueOf(params)
+	params_count := params_reflected.Len()
+
 	log_type := LogTypeStd
-	if total <= 0 {
+	if params_count <= 0 {
 		log.Print("dump content empty !")
 		return
-	} else if total > 1 && params[1] != "" {
-		log_type = params[1]
+	} else if params_count > 1 {
+		log_type = params_reflected.Index(1).Interface()
 	}
-	content := params[0]
+	content := params_reflected.Index(0)
 
 	var logObj = logging.MustGetLogger("example")
 	var format = logging.MustStringFormatter(
@@ -78,6 +78,7 @@ func Dump(log_priority Priority, params []string) {
 	)
 	var backend = logging.NewLogBackend(os.Stderr, "", 0)
 	if LogTypeFile == log_type {
+
 		logFile, err := os.Create(fileName)
 		defer logFile.Close()
 		if err != nil {

@@ -7,7 +7,6 @@ import (
 	"runtime"
 	"go-beanstalk/libs/Logger"
 	"go-beanstalk/libs/Queue"
-	"go-beanstalk/libs/Db"
 )
 
 /**
@@ -16,12 +15,10 @@ import (
  */
 func main() {
 
-	Db.Test()
 	Logger.Notice(" ============== 队列任务处理脚本启动 ============== ")
-	Logger.Warning(" ============== 队列任务处理脚本启动 ============== ")
-	Logger.Error(" ============== 队列任务处理脚本启动 ============== ")
-	Logger.Debug(" ============== 队列任务处理脚本启动 ============== ")
-	Logger.Critical(" ============== 队列任务处理脚本启动 ============== ", Logger.LogTypeFile)
+
+	//Db.Test()
+
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
