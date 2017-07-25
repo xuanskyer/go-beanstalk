@@ -8,14 +8,27 @@ import (
 	"go-beanstalk/libs/Config"
 )
 
-func buildDsn()  {
+var (
+	dsn string = ""
+)
 
+func buildDsn() {
+	test_config := Config.Get("db.test")
+	database := test_config["dbname"]
+	address := ""
+	if "" != test_config["host"] {
+		address = test_config["host"]
+	}
+	if "" != test_config["port"] {
+		address = address + ":" + test_config["port"]
+	}
+	dsn = test_config["username"] + ":" + test_config["password"] + "@" + test_config["protocol"] + "(" + address + ")/" + database + "?charset=" + test_config["charset"] + "&parseTime=" + test_config["parseTime"] + "&loc=" + test_config["loc"]
 }
 
 func Test() {
-	v := Config.Get("db.test")
-	fmt.Println(v)
-	mysql, err := gorm.Open("mysql", "root:root@/test?charset=utf8&parseTime=True&loc=Local")
+	buildDsn()
+	//mysql, err := gorm.Open("mysql", "root:root@tcp()/test?charset=utf8&parseTime=True&loc=Local")
+	mysql, err := gorm.Open("mysql", dsn)
 	if err != nil {
 		fmt.Println(err)
 		panic("failed to connect database")
